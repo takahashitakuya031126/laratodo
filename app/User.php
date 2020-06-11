@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Mail\ResetPassword;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -26,4 +28,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function folders()
+    {
+        return $this->hasMany('App\Folder');
+    }
+    
+    public function sendPasswordResetNotification($token)
+    {
+        Mail::to($this)->send(new ResetPassword($token));
+    }
 }
